@@ -42,22 +42,21 @@
 				<td>{{ campaign.town }}</td>
 				<td>{{ campaign.radius }}</td>
 				<td><button type="button" style="width: 100px"
-						ng-click="editCampaign(campaign.id)"
-						class="btn btn-success custom-width">Edit</button>
-					<button type="button" style="width: 100px"
-						ng-click="removeCampaign(id)" class="btn btn-danger custom-width">Remove</button></td>
-				<!-- <td><a ng-click="editCampaign(campaign.id)" class="button">Edit</a>
-					| <a ng-click="removeCampaign(id)" class="button">Remove</a></td> -->
+						class="btn btn-outline-success"
+						ng-click="editCampaign(campaign.id)">Edit</button>
+					<button type="button" style="width: 100px" 
+						class="btn btn-outline-danger"ng-click="removeCampaign(id)">Remove</button></td>
 			</tr>
 
 		</table>
 	</div>
 
-	
+
 	<div class="form-group col-md-12">
-		<label class="col-md-2 control-lable">Account balance: {{ accountBalance }}</label> 
+		<label class="col-md-2 control-lable">Account balance: {{
+			accountBalance }}</label>
 	</div>
-	
+
 	<br></br>
 
 	<div class="generic-container">
@@ -148,10 +147,8 @@
 							</div>
 						</div>
 						<div class="row">
-							<div class="buttonHolder">
-								<input type="submit" value="Submit" align="center" id="btn_s"
-									class="btn btn-primary btn-sm" />
-							</div>
+								<input type="submit" value="Submit" align="center"
+									class="btn btn-primary btn-block" />
 						</div>
 
 
