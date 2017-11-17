@@ -1,8 +1,5 @@
 package com.salesmanager.campaing.domain;
 
-import java.util.List;
-
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,21 +14,18 @@ public class Campaign {
 	
 	private String name;
 
-	@ElementCollection
-	private List<String> keywords; //(mandatory, pre-populated with typeahead)
+	private String keyword; 
 	
-	private double bidAmount; //(mandatory, min amount )
+	private int bidAmount;
 	
-	private double campaignFunds; //(mandatory and deducted from their Emerald account 
-	//funds, new balance updated on screen -TODO
+	private int campaignFunds;
 	
-	private boolean status; //(on or off - mandatory)
+	private boolean status; 
 	
-	private String town; //(can pick from pre-populated  dropdown list of towns)
+	private String town; 
 	
 	private int radius;
-	
-	
+
 	public int getId() {
 		return id;
 	}
@@ -48,27 +42,27 @@ public class Campaign {
 		this.name = name;
 	}
 
-	public List<String> getKeywords() {
-		return keywords;
+	public String getKeyword() {
+		return keyword;
 	}
 
-	public void setKeywords(List<String> keywords) {
-		this.keywords = keywords;
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
-	public double getBidAmount() {
+	public int getBidAmount() {
 		return bidAmount;
 	}
 
-	public void setBidAmount(double bidAmount) {
+	public void setBidAmount(int bidAmount) {
 		this.bidAmount = bidAmount;
 	}
 
-	public double getCampaignFunds() {
+	public int getCampaignFunds() {
 		return campaignFunds;
 	}
 
-	public void setCampaignFunds(double campaignFunds) {
+	public void setCampaignFunds(int campaignFunds) {
 		this.campaignFunds = campaignFunds;
 	}
 
@@ -95,7 +89,6 @@ public class Campaign {
 	public void setRadius(int radius) {
 		this.radius = radius;
 	}
-	
-	
+
 	
 }

@@ -1,5 +1,8 @@
 package com.salesmanager.campaing.domain;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class EmeraldAccount {
 
 	private double balance;

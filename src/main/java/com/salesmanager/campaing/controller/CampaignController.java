@@ -15,18 +15,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.salesmanager.campaign.exceptions.ErrorResponse;
 import com.salesmanager.campaign.exceptions.NoSuchCampaignException;
+import com.salesmanager.campaign.exceptions.InsufficientFundsException;
 import com.salesmanager.campaing.dao.CampaignRepo;
 import com.salesmanager.campaing.domain.Campaign;
-
+import com.salesmanager.campaing.domain.EmeraldAccount;
 
 @RestController
-@RequestMapping(value = "/campaign")
+@RequestMapping(value = "/sales/campaign")
 public class CampaignController {
 
+	private final EmeraldAccount account;
+	
 	private final CampaignRepo campaignRepo;
 	
 	@Autowired
-	public CampaignController(CampaignRepo campaignRepo) {
+	public CampaignController(CampaignRepo campaignRepo, EmeraldAccount account) {
+		this.account = account;
 		this.campaignRepo = campaignRepo;
 	}
 	
@@ -38,7 +42,8 @@ public class CampaignController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)
-	public void addCampaing(@RequestBody Campaign campaign) {
+	public void addCampaign(@RequestBody Campaign campaign) {
+		checkAndDecreaseAccountBalance(campaign);
 		campaignRepo.save(campaign);
 	}
 	
@@ -53,6 +58,12 @@ public class CampaignController {
 		return campaign.get();
 	}
 	
+	@RequestMapping(value = "/account", method = RequestMethod.GET)
+	@ResponseStatus(HttpStatus.OK)
+	public double getBalance() {
+		return account.getBalance();
+	}
+	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	@ResponseStatus(HttpStatus.OK)
 	public Campaign updateCampaign(@PathVariable int id, @RequestBody Campaign campaign) {
@@ -60,7 +71,7 @@ public class CampaignController {
 		Optional<Campaign> currentCamapign = Optional.of(campaignRepo.findOne(id));
 		currentCamapign.ifPresent(c ->  {
 			c.setName(campaign.getName());
-			c.setKeywords(campaign.getKeywords());
+			c.setKeyword(campaign.getKeyword());
 			c.setBidAmount(campaign.getBidAmount());
 			c.setCampaignFunds(campaign.getCampaignFunds());
 			c.setStatus(campaign.isStatus());
@@ -71,7 +82,8 @@ public class CampaignController {
 		if(!currentCamapign.isPresent()) {
 			throw new NoSuchCampaignException(id);
 		}
-		
+		increaseAccountBalance(currentCamapign.get());
+		checkAndDecreaseAccountBalance(campaign);
 		campaignRepo.save(currentCamapign.get());
 		return currentCamapign.get();
 	}
@@ -83,6 +95,7 @@ public class CampaignController {
 		if(!campaign.isPresent()) {
 			throw new NoSuchCampaignException(id);
 		}
+		increaseAccountBalance(campaign.get());
 		campaignRepo.delete(campaign.get());
 	}
 	
@@ -90,5 +103,24 @@ public class CampaignController {
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorResponse handleException(NoSuchCampaignException e) {
 		return new ErrorResponse(HttpStatus.NOT_FOUND.value(), e.getMessage());
+	}
+	
+	@ExceptionHandler(InsufficientFundsException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResponse handleException(InsufficientFundsException e) {
+		return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+	}
+	
+	/* Private Methods */
+	
+	private void checkAndDecreaseAccountBalance(Campaign c) {
+		if(c.getCampaignFunds() > account.getBalance()) {
+			throw new InsufficientFundsException();
+		}
+		account.setBalance(account.getBalance() - c.getCampaignFunds());
+	}
+	
+	private void increaseAccountBalance(Campaign c) {
+		account.setBalance(account.getBalance() + c.getCampaignFunds());
 	}
 }
