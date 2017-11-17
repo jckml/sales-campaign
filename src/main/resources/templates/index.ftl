@@ -52,9 +52,13 @@
 
 		</table>
 	</div>
+
+	
+	<div class="form-group col-md-12">
+		<label class="col-md-2 control-lable">Account balance: {{ accountBalance }}</label> 
 	</div>
-	<td>Account balance: {{ accountBalance }}</td>
-<br></br>
+	
+	<br></br>
 
 	<div class="generic-container">
 		<div class="panel panel-default">
@@ -115,8 +119,7 @@
 						<div class="row">
 							<div class="form-group col-md-12">
 								<label class="col-md-2 control-lable">Status</label> <input
-									type="checkbox" ng-model="form.status" class="checkDIV"
-									required />
+									type="checkbox" ng-model="form.status" class="checkDIV" />
 								</td>
 							</div>
 						</div>
@@ -146,7 +149,7 @@
 						</div>
 						<div class="row">
 							<div class="buttonHolder">
-								<input type="submit" value="Submit" id="btn_s"
+								<input type="submit" value="Submit" align="center" id="btn_s"
 									class="btn btn-primary btn-sm" />
 							</div>
 						</div>
