@@ -40,9 +40,5 @@ public class SalesCampaignApplicationTest {
 		
 	}
 	
-	@Test
-	public void displayingView() throws Exception {
-		mockMvc.perform(get("/")).andExpect(status().is(200))
-		.andExpect(content().string(containsString("index")));
-	}
+	
 }

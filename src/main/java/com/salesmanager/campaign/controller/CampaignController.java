@@ -68,8 +68,10 @@ public class CampaignController {
 	@ResponseStatus(HttpStatus.OK)
 	public Campaign updateCampaign(@PathVariable int id, @RequestBody Campaign campaign) {
 		
+		
 		Optional<Campaign> currentCamapign = Optional.of(campaignRepo.findOne(id));
 		currentCamapign.ifPresent(c ->  {
+			increaseAccountBalance(c);
 			c.setName(campaign.getName());
 			c.setKeyword(campaign.getKeyword());
 			c.setBidAmount(campaign.getBidAmount());
@@ -82,7 +84,7 @@ public class CampaignController {
 		if(!currentCamapign.isPresent()) {
 			throw new NoSuchCampaignException(id);
 		}
-		increaseAccountBalance(currentCamapign.get());
+		
 		checkAndDecreaseAccountBalance(campaign);
 		campaignRepo.save(currentCamapign.get());
 		return currentCamapign.get();

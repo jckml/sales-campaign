@@ -145,7 +145,7 @@ var app = angular.module('CampaignManagement', []);
             .then(
             	_refreshPageData(),
             	function(errResponse){
-                	console.error('Error while deleting User');
+                	console.error('Error while deleting Campaign');
             	}
         	);
 		}; 
@@ -180,6 +180,7 @@ var app = angular.module('CampaignManagement', []);
 			}
 
 		function _clearForm() {
+			$scope.form.id = -1;
 			$scope.form.name = "";
 			$scope.form.keyword = "";
 			$scope.form.bidAmount = 0;
