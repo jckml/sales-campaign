@@ -1,6 +1,8 @@
 package com.salesmanager.campaing;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -14,9 +16,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.salesmanager.campaign.SalesCampaignApplication;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest(classes=SalesCampaignApplication.class)
 @WebAppConfiguration
 public class SalesCampaignApplicationTest {
 
@@ -32,7 +36,13 @@ public class SalesCampaignApplicationTest {
 	
 	@Test
 	public void contextLoads() throws Exception{
-		mockMvc.perform(get("/campaign")).andExpect(status().is(200));
+		mockMvc.perform(get("/sales/campaign")).andExpect(status().is(200));
 		
+	}
+	
+	@Test
+	public void displayingView() throws Exception {
+		mockMvc.perform(get("/")).andExpect(status().is(200))
+		.andExpect(content().string(containsString("index")));
 	}
 }
