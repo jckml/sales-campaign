@@ -182,11 +182,11 @@ var app = angular.module('CampaignManagement', []);
 		function _clearForm() {
 			$scope.form.name = "";
 			$scope.form.keyword = "";
-			$scope.form.bidAmount = "";
-			$scope.form.campaignFunds = "";
-			$scope.form.status = "";
+			$scope.form.bidAmount = 0;
+			$scope.form.campaignFunds = 0;
+			$scope.form.status = false;
 			$scope.form.town = "";
-			$scope.form.radius = "";
+			$scope.form.radius = 0;
 		}
 		;
 	}]);
