@@ -1,4 +1,4 @@
-package com.salesmanager.campaing.config;
+package com.salesmanager.campaign.config;
 
 
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.salesmanager.campaing.controller;
+package com.salesmanager.campaign.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.salesmanager.campaign.dao.CampaignRepo;
+import com.salesmanager.campaign.domain.Campaign;
+import com.salesmanager.campaign.domain.EmeraldAccount;
 import com.salesmanager.campaign.exceptions.ErrorResponse;
 import com.salesmanager.campaign.exceptions.NoSuchCampaignException;
 import com.salesmanager.campaign.exceptions.InsufficientFundsException;
-import com.salesmanager.campaing.dao.CampaignRepo;
-import com.salesmanager.campaing.domain.Campaign;
-import com.salesmanager.campaing.domain.EmeraldAccount;
 
 @RestController
 @RequestMapping(value = "/sales/campaign")

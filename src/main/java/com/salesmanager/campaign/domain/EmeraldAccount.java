@@ -1,4 +1,4 @@
-package com.salesmanager.campaing.domain;
+package com.salesmanager.campaign.domain;
 
 import org.springframework.stereotype.Component;
 
