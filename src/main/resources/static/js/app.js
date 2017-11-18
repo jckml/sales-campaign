@@ -1,5 +1,5 @@
 var app = angular.module('CampaignManagement', []);
-//service
+// service
 	app.factory('CampaignService', ['$http', '$q', function($http, $q){
 		 
 	    var REST_SERVICE_URI = 'http://localhost:8080/sales/campaign/';
@@ -9,7 +9,7 @@ var app = angular.module('CampaignManagement', []);
 	        createCampaign: createCampaign,
 	        updateCampaign:updateCampaign,
 	        deleteCampaign:deleteCampaign,
-	        fetchAccoutBalance:fetchAccountBalance
+	        fetchAccountBalance:fetchAccountBalance
 	    };
 	 
 	    return factory;
@@ -19,6 +19,7 @@ var app = angular.module('CampaignManagement', []);
 	        $http.get(REST_SERVICE_URI)
 	            .then(
 	            function (response) {
+	            	console.log('campaign fetched');
 	                deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -31,9 +32,11 @@ var app = angular.module('CampaignManagement', []);
 	 
 	    function createCampaign(form) {
 	        var deferred = $q.defer();
+	        console.log('campaign created1');
 	        $http.post(REST_SERVICE_URI, form)
 	            .then(
 	            function (response) {
+	            	console.log('campaign created2');
 	                deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -50,6 +53,7 @@ var app = angular.module('CampaignManagement', []);
 	        $http.put(REST_SERVICE_URI+id, form)
 	            .then(
 	            function (response) {
+	            	console.log('campaign updated');
 	                deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -65,6 +69,7 @@ var app = angular.module('CampaignManagement', []);
 	        $http.delete(REST_SERVICE_URI+id)
 	            .then(
 	            function (response) {
+	            	console.log('campaign deleted');
 	                deferred.resolve(response.data);
 	            },
 	            function(errResponse){
@@ -77,7 +82,7 @@ var app = angular.module('CampaignManagement', []);
 	 
 	    function fetchAccountBalance() {
 	    	var deferred = $q.defer();
-	        $http.get(REST_SERVICE_URI + "account")
+	        $http.get(REST_SERVICE_URI + 'account')
 	            .then(
 	            function (response) {
 	                deferred.resolve(response.data);
@@ -89,61 +94,51 @@ var app = angular.module('CampaignManagement', []);
 	        );
 	        return deferred.promise;
 	    }
-	    
 	}]);
 	// Controller
-	app.controller('CampaignController', ['$scope', 'CampaignService', function($scope, CampaignService) {
+	app.controller('CampaignController', ['$scope', '$http', 'CampaignService', function($scope, $http, CampaignService) {
+		
 		$scope.campaigns = [];
 		$scope.form = {
 			id : -1,
 			name : "",
 			keyword : "",
-			bidAmount : 0,
-			campaignFunds : 0,
+			bidAmount : "",
+			campaignFunds : "",
 			status : false,
 			town : "",
-			radius : 0
+			radius : ""
 		};
 
 		$scope.accountBalance = 0.0;
-
-		_refreshPageData();
+		refreshAccountBalance();
 		
 		$scope.submitCampaign = function() {
 
-			var method = "";
-			var url = "";
 			if ($scope.form.id == -1) {
-				console.log('Saving New Campaign');
-				CampaignService.createCampaign($scope.form)
-            		.then(
-            			_refreshPageData(),
-            			function(errResponse){
-                			console.error('Error while creating Campaign');
-            			}
-					);
+				createCampaign($scope.form);
+				console.log('Campaign created');
+				success();
+				/*$http.post(REST_SERVICE_URI, $scope.form).then(function(response) {
+					$scope.form = response.data;
+					_refreshAccountBalance();
+				});*/
 			} else {
-				CampaignService.updateCampaign($scope.form, $scope.form.id)
-            		.then(
-            			_refreshPageData(),
-            			function(errResponse){
-                			console.error('Error while updating Campaign');
-            			}
-        			);
+				updateCampaign($scope.form, $scope.form.id);
+				success();
 	            console.log('Campaign updated');
 			}
-			_refreshPageData();
-			_clearForm()
+			//success();
 		};
 
 
 		$scope.removeCampaign = function(id) {
 	         if($scope.form.id === id) {
-	        	_clearForm();
+	        	clearForm();
 	        }
 			CampaignService.deleteCampaign(id)
             .then(
-            	_refreshPageData(),
+            	success(),
             	function(errResponse){
                 	console.error('Error while deleting Campaign');
             	}
@@ -159,35 +154,71 @@ var app = angular.module('CampaignManagement', []);
 	        } 
 		};
 
-		/* Private Methods */
-		 function _refreshPageData() {
+		function createCampaign(form) {
+			CampaignService.createCampaign(form)
+    		.then(
+    			success(),
+    			function(errResponse){
+        			console.error('Error while creating Campaign');
+    			}
+			);
+		}
+		
+		function updateCampaign(form, id) {
+			CampaignService.updateCampaign(form, id)
+    		.then(
+    			success(),
+    			function(errResponse){
+        			console.error('Error while updating Campaign');
+    			}
+			);
+		}
+		
+		 function success() {
+			 refreshAccountBalance();
+             refreshPageData();
+             clearForm();
+         }
+		
+		 function refreshPageData() {
 			CampaignService.fetchAllCampaigns()
 				.then(function (d) {
 				$scope.campaigns = d;
 			}, function (errResponse) {
 				console.log(response.statusText);
 			});
-			
+			/*$http.get(REST_SERVICE_URI).then(function(response) {
+				$scope.campaigns = response.data;
+			}, function (response) {
+				console.log(response.statusText);
+			});*/
 		}
+		 
 		
-		 function _refreshAccountBalance() {
+		 function refreshAccountBalance() {
 				CampaignService.fetchAccountBalance()
 					.then(function (d) {
 					$scope.accountBalance = d;
 				}, function (errResponse) {
 					console.log(response.statusText);
 				});
+			 /*$http.get(REST_SERVICE_URI + 'account').then(function(response) {
+					$scope.accountBalance = response.data;
+				}, function (response) {
+					console.log(response.statusText);
+				});*/
 			}
 
-		function _clearForm() {
-			$scope.form.id = -1;
-			$scope.form.name = "";
-			$scope.form.keyword = "";
-			$scope.form.bidAmount = 0;
-			$scope.form.campaignFunds = 0;
-			$scope.form.status = false;
-			$scope.form.town = "";
-			$scope.form.radius = 0;
-		}
-		;
+		function clearForm() {
+			$scope.form = {
+					id : -1,
+					name : "",
+					keyword : "",
+					bidAmount : "",
+					campaignFunds : "",
+					status : false,
+					town : "",
+					radius : ""
+				};
+			};
 	}]);

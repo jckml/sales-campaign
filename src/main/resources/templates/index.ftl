@@ -7,6 +7,10 @@
 <link href="/static/css/bootstrap.css" rel="stylesheet" />
 <link href="/static/css/app.css" rel="stylesheet" />
 <!-- load angularJS -->
+
+<script type="text/javascript">
+	
+</script>
 <script
 	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
 <script src="static/js/app.js"></script>
@@ -38,14 +42,14 @@
 				<td>{{ campaign.keyword }}</td>
 				<td>{{ campaign.bidAmount }}</td>
 				<td>{{ campaign.campaignFunds }}</td>
-				<td>{{ campaign.status }}</td>
+				<td>{{ campaign.status ? 'on':'off'}}</td>
 				<td>{{ campaign.town }}</td>
 				<td>{{ campaign.radius }}</td>
 				<td><button type="button" style="width: 100px"
 						class="btn btn-outline-success"
 						ng-click="editCampaign(campaign.id)">Edit</button>
-					<button type="button" style="width: 100px" 
-						class="btn btn-outline-danger"ng-click="removeCampaign(id)">Remove</button></td>
+					<button type="button" style="width: 100px"
+						class="btn btn-outline-danger" ng-click="removeCampaign(campaign.id)">Remove</button></td>
 			</tr>
 
 		</table>
@@ -147,12 +151,9 @@
 							</div>
 						</div>
 						<div class="row">
-								<input type="submit" value="Submit" align="center"
-									class="btn btn-primary btn-block" />
+							<input type="submit" value="Submit" align="center"
+								class="btn btn-primary btn-block" />
 						</div>
-
-
-
 					</form>
 				</div>
 			</div>
