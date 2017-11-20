@@ -22,7 +22,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="table-responsive"></div>
-		<table style="width: 1000px; table-layout: fixed"
+		<table style="width: 100%; table-layout: fixed"
 			class="table table-hover">
 			<tr>
 				<th style="width: 5%">Id</th>
@@ -49,7 +49,8 @@
 						class="btn btn-outline-success"
 						ng-click="editCampaign(campaign.id)">Edit</button>
 					<button type="button" style="width: 100px"
-						class="btn btn-outline-danger" ng-click="removeCampaign(campaign.id)">Remove</button></td>
+						class="btn btn-outline-danger"
+						ng-click="removeCampaign(campaign.id)">Remove</button></td>
 			</tr>
 
 		</table>
@@ -71,7 +72,7 @@
 			<div class="panel-body">
 				<div class="formcontainer">
 					<form ng-submit="submitCampaign()" name="campaignForm"
-						class="form-horizontal" style="width: 600px">
+						class="form-horizontal" style="width: 100%">
 						<div class="row">
 							<div class="form-group col-md-12">
 								<label class="col-md-2 control-lable">Name</label> <input
@@ -152,7 +153,9 @@
 						</div>
 						<div class="row">
 							<input type="submit" value="Submit" align="center"
-								class="btn btn-primary btn-block" />
+								class="btn btn-outline-primary" />
+							<button type="button" ng-click="refreshPageData()"
+								class="btn btn-outline-warning">Refresh</button>
 						</div>
 					</form>
 				</div>
